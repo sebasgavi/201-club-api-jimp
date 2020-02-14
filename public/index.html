@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <section>
+        <label>
+            Tipo
+            <select class="type">
+                <option value="">Aleatorio</option>
+                <option value="cats">Gatos</option>
+                <option value="dogs">Perros</option>
+                <option value="birds">Pájaros</option>
+            </select>
+        </label>
+
+        <label>
+            Tamaño
+            <input type="number" class="width" />
+            <p>x</p>
+            <input type="number" class="height" />
+        </label>
+
+        <label>
+            Ajuste
+            <select class="resizeType">
+                <option value="stretch">Estirar</option>
+                <option value="cover">Cubrir</option>
+                <option value="contain">Ajustar</option>
+            </select>
+        </label>
+    </section>
+
+    <section>
+        <label>
+            Texto
+            <input type="text" 
+                placeholder="Escribe aquí tu texto."
+                class="text" />
+        </label>
+
+        <label>
+            Color
+            <input type="color" class="color" />
+        </label>
+    </section>
+
+    <button>
+        Confirmar
+    </button>
+
+    <script>
+        var button = document.querySelector('button');
+        button.addEventListener('click', function(){
+            var newHref = '/api/1/images/';
+            
+            var type = document.querySelector('.type').value;
+            var width = document.querySelector('.width').value;
+            var height = document.querySelector('.height').value;
+            var resizeType = document.querySelector('.resizeType').value;
+            var text = document.querySelector('.text').value;
+            var color = document.querySelector('.color').value;
+            
+            newHref += width + 'x' + height + '?';
+
+            if(type){
+                newHref += 'type=' + type;
+            }
+            if(resizeType){
+                newHref += '&' + 'resize_type=' + resizeType;
+            }
+            if(text){
+                newHref += '&' + 'text=' + text;
+            }
+            if(color){
+                newHref += '&' + 'bg=' + color.substring(1);
+            }
+
+
+            console.log(newHref);
+            location.href = newHref;
+        });
+
+        var initialX;
+        var initialY;
+        var rect;
+        window.addEventListener('mousedown', (event) => {
+            initialX = event.clientX;
+            initialY = event.clientY;
+            rect = document.createElement('div');
+            rect.style.position = 'fixed';
+            rect.style.left = initialX + 'px';
+            rect.style.top = initialY + 'px';
+            rect.style.border = '1px solid red';
+            document.body.appendChild(rect);
+        });
+        window.addEventListener('mousemove', (event) => {
+            if(rect){
+                width = event.clientX - initialX;
+                height = event.clientY - initialY;
+                rect.style.width = width + 'px';
+                rect.style.height = height + 'px';
+                rect.innerText = width + 'x' + height;
+            }
+        });
+        window.addEventListener('mouseup', (event) => {
+            width = event.clientX - initialX;
+            height = event.clientY - initialY;
+            document.querySelector('.width').value = width;
+            document.querySelector('.height').value = height;
+            rect.remove();
+            rect = null;
+        });
+    </script>
+    
+</body>
+</html>

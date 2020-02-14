@@ -2,6 +2,7 @@ const express = require('express');
 const Jimp = require('jimp');
 const assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.get('/api/1/images/:dimensions', function(req, res){
             // creo un número random desde 0 hasta el tamaño del arreglo
             const random = Math.floor(Math.random() * files.length);
             // uso el número random para sacar el nombre de la imagen en esa posición
-            imgName = files[random];
+            const imgName = files[random];
 
             Jimp.read('./public/img/' + type + '/' + imgName, function(err, img){
                 assert.equal(err, null);
@@ -70,6 +71,10 @@ app.get('/api/1/images/:dimensions', function(req, res){
             });
         });
     });
+});
+
+app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, '/public/index.html'));
 });
 
 app.listen(3000, function(){
